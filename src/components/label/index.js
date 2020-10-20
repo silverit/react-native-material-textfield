@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import React, { PureComponent } from 'react';
-import { Animated } from 'react-native';
+import { Animated, Text } from 'react-native';
 
 import styles from './styles';
 
@@ -24,13 +24,9 @@ export default class Label extends PureComponent {
     tintColor: PropTypes.string.isRequired,
     errorColor: PropTypes.string.isRequired,
 
-    focusAnimation: PropTypes
-      .instanceOf(Animated.Value)
-      .isRequired,
+    focusAnimation: PropTypes.instanceOf(Animated.Value).isRequired,
 
-    labelAnimation: PropTypes
-      .instanceOf(Animated.Value)
-      .isRequired,
+    labelAnimation: PropTypes.instanceOf(Animated.Value).isRequired,
 
     contentInset: PropTypes.shape({
       label: PropTypes.number,
@@ -43,7 +39,7 @@ export default class Label extends PureComponent {
       y1: PropTypes.number,
     }),
 
-    style: Animated.Text.propTypes.style,
+    style: Text.propTypes.style,
     label: PropTypes.string,
   };
 
@@ -69,11 +65,11 @@ export default class Label extends PureComponent {
       return null;
     }
 
-    let color = disabled?
-      baseColor:
-      restricted?
-        errorColor:
-        focusAnimation.interpolate({
+    let color = disabled
+      ? baseColor
+      : restricted
+      ? errorColor
+      : focusAnimation.interpolate({
           inputRange: [-1, 0, 1],
           outputRange: [errorColor, baseColor, tintColor],
         });
@@ -91,22 +87,26 @@ export default class Label extends PureComponent {
     y0 += fontSize * 0.25;
 
     let containerStyle = {
-      transform: [{
-        scale: labelAnimation.interpolate({
-          inputRange: [0, 1],
-          outputRange: [1, activeFontSize / fontSize],
-        }),
-      }, {
-        translateY: labelAnimation.interpolate({
-          inputRange: [0, 1],
-          outputRange: [y0, y1],
-        }),
-      }, {
-        translateX: labelAnimation.interpolate({
-          inputRange: [0, 1],
-          outputRange: [x0, x1],
-        }),
-      }],
+      transform: [
+        {
+          scale: labelAnimation.interpolate({
+            inputRange: [0, 1],
+            outputRange: [1, activeFontSize / fontSize],
+          }),
+        },
+        {
+          translateY: labelAnimation.interpolate({
+            inputRange: [0, 1],
+            outputRange: [y0, y1],
+          }),
+        },
+        {
+          translateX: labelAnimation.interpolate({
+            inputRange: [0, 1],
+            outputRange: [x0, x1],
+          }),
+        },
+      ],
     };
 
     return (
